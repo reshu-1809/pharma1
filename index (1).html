@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PharmaCare | Pharmacy Management</title>
+<style>
+:root{--green:#16834a;--deep:#105c35;--mint:#eaf7ef;--bg:#f5f8f6;--text:#17251d;--muted:#64746a;--line:#e2eae5}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}button{cursor:pointer}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 10% 10%,#d9f4e3,transparent 35%),linear-gradient(135deg,#f8fcf9,#edf6f0)}
+.login-card{width:min(440px,100%);background:white;border:1px solid #e5eee8;border-radius:24px;padding:32px;box-shadow:0 18px 55px #125c3515}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:var(--green);display:grid;place-items:center;color:white;font-size:25px;font-weight:800}
+.brand h1{font-size:21px;margin:0}.brand p{margin:3px 0;color:var(--muted);font-size:13px}
+.login-card h2{margin:28px 0 6px;font-size:25px}.sub{color:var(--muted);margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:650;margin:14px 0 7px}
+input,select{width:100%;padding:12px 13px;border:1px solid #d8e3dc;border-radius:11px;background:#fff;outline:none}input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px #16834a15}
+.passrow{display:flex;gap:8px}.passrow input{flex:1}.passrow button{border:1px solid var(--line);background:white;border-radius:10px;padding:0 12px;color:var(--muted)}
+.primary{border:0;background:var(--green);color:white;padding:12px 16px;border-radius:11px;font-weight:700}.primary:hover{background:var(--deep)}.login-btn{width:100%;margin-top:22px}
+.error{color:#b42318;font-size:13px;min-height:18px;margin-top:8px}.demo{margin-top:18px;padding:12px;background:#f3faf5;border-radius:12px;font-size:12px;color:#496454;line-height:1.7}
+.app{display:none;min-height:100vh}.sidebar{width:250px;background:#103f29;color:#fff;position:fixed;inset:0 auto 0 0;padding:22px 16px;display:flex;flex-direction:column}
+.sidebar .brand h1{color:white}.sidebar .brand p{color:#c5dfcf}.sidebar .logo{background:#28a563}
+.role-pill{display:inline-block;margin:22px 0 14px;background:#ffffff18;color:#d9f4e3;padding:7px 11px;border-radius:20px;font-size:12px}
+.nav{display:grid;gap:5px}.nav button{background:transparent;border:0;color:#d9e9df;text-align:left;padding:11px 12px;border-radius:10px}.nav button:hover,.nav button.active{background:#ffffff18;color:#fff}
+.logout{margin-top:auto;background:#ffffff16;border:1px solid #ffffff20;color:white;border-radius:10px;padding:11px}
+main{margin-left:250px;padding:28px;max-width:1400px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.top h2{margin:0;font-size:26px}.top p{margin:5px 0;color:var(--muted)}.user{background:white;border:1px solid var(--line);border-radius:999px;padding:9px 14px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px}.stat .label{color:var(--muted);font-size:13px}.stat strong{font-size:26px;display:block;margin-top:7px}.stat small{color:var(--green)}
+.panel h3{margin:0 0 16px}.panel-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:520px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:650}tr:last-child td{border:0}.badge{display:inline-block;border-radius:999px;padding:5px 8px;font-size:11px;background:#e9f7ef;color:#147644}.badge.warn{background:#fff3df;color:#9a5a00}.badge.danger{background:#feeceb;color:#b42318}
+.section{display:none}.section.show{display:block}.quick{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.quick button{border:1px solid var(--line);background:white;border-radius:10px;padding:10px 13px}
+.formrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.formrow input{max-width:230px}.notice{color:var(--muted);font-size:13px}
+@media(max-width:900px){.sidebar{width:210px}main{margin-left:210px;padding:20px}.stats{grid-template-columns:repeat(2,1fr)}.panel-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.sidebar{position:static;width:auto;min-height:auto}.app{display:none}.sidebar .nav{grid-template-columns:repeat(2,1fr)}.logout{margin-top:12px}.main-shell{display:block}main{margin:0;padding:16px}.top{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr 1fr}.panel-grid{grid-template-columns:1fr}.login-card{padding:24px}}
+</style>
+</head>
+<body>
+<div id="login" class="login-wrap">
+ <div class="login-card">
+  <div class="brand"><div class="logo">✚</div><div><h1>PharmaCare</h1><p>Pharmacy Management System</p></div></div>
+  <h2>Welcome back</h2><p class="sub">Sign in to continue to your workspace</p>
+  <label for="role">Account type</label><select id="role"><option value="Admin">Admin</option><option value="Pharmacist">Pharmacist</option></select>
+  <label for="username">Username</label><input id="username" autocomplete="username" placeholder="Enter username">
+  <label for="password">Password</label><div class="passrow"><input id="password" type="password" autocomplete="current-password" placeholder="Enter password"><button type="button" id="toggle">Show</button></div>
+  <div class="error" id="error"></div><button class="primary login-btn" id="loginBtn">Login</button>
+  <div class="demo"><strong>Demo accounts</strong><br>Admin: <code>admin</code> / <code>admin123</code><br>Pharmacist: <code>pharmacist</code> / <code>pharma123</code><br><em>Demo only — credentials are not secure production authentication.</em></div>
+ </div>
+</div>
+<div id="app" class="app">
+ <aside class="sidebar">
+  <div class="brand"><div class="logo">✚</div><div><h1>PharmaCare</h1><p>Management System</p></div></div>
+  <div class="role-pill" id="rolePill">ADMIN ACCESS</div>
+  <nav class="nav" id="nav">
+   <button class="active" data-section="dashboard">▦ Dashboard</button>
+   <button data-section="inventory">▤ Medicine Inventory</button>
+   <button data-section="billing">▣ Billing & Sales</button>
+   <button data-section="customers">♙ Customers</button>
+   <button data-section="expiry">◷ Expiry Tracking</button>
+   <button data-section="reports">▥ Reports</button>
+   <button data-section="staff" id="staffNav">♧ Team & Access</button>
+  </nav>
+  <button class="logout" id="logout">↪ Log out</button>
+ </aside>
+ <div class="main-shell"><main>
+  <div class="top"><div><h2 id="pageTitle">Dashboard</h2><p id="welcome">Overview of your pharmacy</p></div><div class="user" id="userTag">Admin</div></div>
+  <section class="section show" id="dashboard">
+   <div class="stats">
+    <div class="stat"><span class="label">Medicine Items</span><strong id="medicineCount">6</strong><small>In inventory</small></div>
+    <div class="stat"><span class="label">Today's Sales</span><strong>₹8,450</strong><small>Demo data</small></div>
+    <div class="stat"><span class="label">Customers</span><strong>128</strong><small>Registered</small></div>
+    <div class="stat"><span class="label">Low Stock</span><strong id="lowStock">2</strong><small>Needs attention</small></div>
+   </div>
+   <div class="panel-grid"><div class="panel"><h3>Recent Inventory</h3><div class="table-wrap"><table><thead><tr><th>Medicine</th><th>Stock</th><th>Status</th></tr></thead><tbody id="recentTable"></tbody></table></div></div>
+   <div class="panel"><h3>Quick Actions</h3><div class="quick"><button onclick="showSection('inventory')">＋ Add medicine</button><button onclick="showSection('billing')">＋ New bill</button><button onclick="showSection('expiry')">Check expiry</button><button onclick="showSection('reports')">View reports</button></div><p class="notice">Use the menu to navigate through modules.</p></div></div>
+  </section>
+  <section class="section" id="inventory"><div class="panel"><h3>Medicine Inventory</h3><div class="formrow"><input id="medName" placeholder="Medicine name"><input id="medQty" type="number" min="0" placeholder="Quantity"><input id="medPrice" type="number" min="0" placeholder="Price (₹)"><button class="primary" onclick="addMedicine()">Add medicine</button></div><div class="table-wrap"><table><thead><tr><th>Medicine</th><th>Quantity</th><th>Price</th><th>Status</th></tr></thead><tbody id="inventoryTable"></tbody></table></div></div></section>
+  <section class="section" id="billing"><div class="panel"><h3>Billing & Sales</h3><p class="notice">Demo billing interface. Add an item and quantity to calculate a sample total.</p><div class="formrow"><select id="billMedicine"></select><input id="billQty" type="number" min="1" value="1" placeholder="Quantity"><button class="primary" onclick="calculateBill()">Calculate bill</button></div><h2 id="billResult">Total: ₹0.00</h2></div></section>
+  <section class="section" id="customers"><div class="panel"><h3>Customer Management</h3><div class="formrow"><input placeholder="Customer name"><input placeholder="Phone number"><button class="primary" onclick="alert('Demo: customer record form')">Add customer</button></div><p class="notice">Customer records shown here in a full backend-connected version.</p><table><thead><tr><th>Name</th><th>Phone</th><th>Last visit</th></tr></thead><tbody><tr><td>Ravi Kumar</td><td>******4321</td><td>Today</td></tr><tr><td>Priya</td><td>******8820</td><td>Yesterday</td></tr></tbody></table></div></section>
+  <section class="section" id="expiry"><div class="panel"><h3>Expiry Tracking</h3><table><thead><tr><th>Medicine</th><th>Expiry</th><th>Stock</th><th>Alert</th></tr></thead><tbody><tr><td>Vitamin C</td><td>2026-12</td><td>24</td><td><span class="badge warn">Expiring soon</span></td></tr><tr><td>Paracetamol</td><td>2027-08</td><td>80</td><td><span class="badge">Valid</span></td></tr><tr><td>Amoxicillin</td><td>2026-11</td><td>12</td><td><span class="badge danger">Check expiry</span></td></tr></tbody></table></div></section>
+  <section class="section" id="reports"><div class="panel"><h3>Reports</h3><div class="stats"><div class="stat"><span class="label">Sales this week</span><strong>₹42,300</strong></div><div class="stat"><span class="label">Transactions</span><strong>96</strong></div><div class="stat"><span class="label">Top category</span><strong style="font-size:20px">Pain relief</strong></div><div class="stat"><span class="label">Report period</span><strong style="font-size:20px">This week</strong></div></div><p class="notice">Sample report values for project demonstration.</p></div></section>
+  <section class="section" id="staff"><div class="panel"><h3>Team & Access</h3><p>Admin can manage team access. Pharmacist account has operational access in this demo.</p><table><thead><tr><th>Account</th><th>Role</th><th>Access</th></tr></thead><tbody><tr><td>admin</td><td>Admin</td><td><span class="badge">Full demo access</span></td></tr><tr><td>pharmacist</td><td>Pharmacist</td><td><span class="badge">Operational access</span></td></tr></tbody></table></div></section>
+ </main></div>
+</div>
+<script>
+const medicines=[
+ {name:'Paracetamol 500mg',qty:80,price:25,expiry:'2027-08'},
+ {name:'Amoxicillin 250mg',qty:12,price:65,expiry:'2026-11'},
+ {name:'Cetirizine 10mg',qty:45,price:18,expiry:'2027-05'},
+ {name:'Vitamin C',qty:24,price:40,expiry:'2026-12'},
+ {name:'ORS Sachets',qty:60,price:22,expiry:'2027-04'},
+ {name:'Antacid Tablets',qty:8,price:35,expiry:'2027-01'}
+];
+const accounts={Admin:{username:'admin',password:'admin123'},Pharmacist:{username:'pharmacist',password:'pharma123'}};
+let currentRole='';
+const $=id=>document.getElementById(id);
+function login(){const role=$('role').value,u=$('username').value.trim(),p=$('password').value;if(u===accounts[role].username&&p===accounts[role].password){currentRole=role;sessionStorage.setItem('pharmacareRole',role);$('error').textContent='';$('login').style.display='none';$('app').style.display='block';$('rolePill').textContent=role.toUpperCase()+' ACCESS';$('userTag').textContent=u+' · '+role;$('welcome').textContent='Welcome, '+role+'! Here is your pharmacy overview.';$('staffNav').style.display=role==='Admin'?'block':'none';render();showSection('dashboard')}else $('error').textContent='Invalid username or password. Please try again.'}
+$('loginBtn').onclick=login;$('password').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('username').addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+$('toggle').onclick=()=>{const inp=$('password');inp.type=inp.type==='password'?'text':'password';$('toggle').textContent=inp.type==='password'?'Show':'Hide'};
+$('logout').onclick=()=>{sessionStorage.removeItem('pharmacareRole');$('app').style.display='none';$('login').style.display='grid';$('username').value='';$('password').value='';$('error').textContent='';};
+$('nav').addEventListener('click',e=>{const btn=e.target.closest('button[data-section]');if(btn)showSection(btn.dataset.section)});
+function showSection(name){document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));$(name).classList.add('show');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.section===name));const titles={dashboard:'Dashboard',inventory:'Medicine Inventory',billing:'Billing & Sales',customers:'Customers',expiry:'Expiry Tracking',reports:'Reports',staff:'Team & Access'};$('pageTitle').textContent=titles[name]||name}
+function render(){const rows=medicines.map(m=>`<tr><td>${m.name}</td><td>${m.qty}</td><td>₹${m.price}</td><td>${m.qty<15?'<span class="badge warn">Low stock</span>':'<span class="badge">In stock</span>'}</td></tr>`).join('');$('recentTable').innerHTML=rows;$('inventoryTable').innerHTML=rows;$('medicineCount').textContent=medicines.length;$('lowStock').textContent=medicines.filter(m=>m.qty<15).length;$('billMedicine').innerHTML=medicines.map((m,i)=>`<option value="${i}">${m.name} — ₹${m.price}</option>`).join('')}
+function addMedicine(){const name=$('medName').value.trim(),qty=Number($('medQty').value),price=Number($('medPrice').value);if(!name||!Number.isFinite(qty)||qty<0||!Number.isFinite(price)||price<0){alert('Enter valid medicine details');return}medicines.push({name,qty,price,expiry:'Not set'});$('medName').value='';$('medQty').value='';$('medPrice').value='';render()}
+function calculateBill(){const m=medicines[Number($('billMedicine').value)],q=Number($('billQty').value);if(!m||q<1){alert('Enter valid quantity');return}$('billResult').textContent='Total: ₹'+(m.price*q).toFixed(2)}
+</script>
+</body></html>
